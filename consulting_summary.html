@@ -358,69 +358,69 @@
       <div class="badge">Analytical Report</div>
       <div class="meta">
         Prepared by: Alexander Gaudi Suhandjaja<br>
-        Date: [Month Year]<br>
-        github.com/GaudiHan/credit-risk-default
+        Date: May 2026<br>
+        github.com/GaudiHan/Credit-Risk-Default-Prediction
       </div>
     </div>
   </div>
 
-  <!-- METRICS -->
+  <!-- METRICS — UPDATED WITH REAL NUMBERS -->
   <div class="metrics">
     <div class="metric-card">
-      <div class="value">0.83</div>
-      <div class="label">ROC-AUC<br>XGBoost Model</div>
+      <div class="value">0.737</div>
+      <div class="label">ROC-AUC<br>Random Forest Model</div>
     </div>
     <div class="metric-card">
       <div class="value">307K</div>
       <div class="label">Loan Applications<br>Analysed</div>
     </div>
     <div class="metric-card">
-      <div class="value">~8%</div>
+      <div class="value">8.2%</div>
       <div class="label">Portfolio Default<br>Rate (baseline)</div>
     </div>
     <div class="metric-card">
       <div class="value">3.5×</div>
-      <div class="label">Risk Threshold<br>Credit-to-Income</div>
+      <div class="label">Risk Multiplier<br>Low Credit Score</div>
     </div>
   </div>
 
   <!-- BODY GRID -->
   <div class="body-grid">
 
-    <!-- LEFT: KEY FINDINGS -->
+    <!-- LEFT: KEY FINDINGS — UPDATED WITH REAL DATA -->
     <div>
       <div class="section-title">Key Findings</div>
 
       <div class="finding">
         <div class="finding-num">1</div>
         <div class="finding-text">
-          <strong>Debt burden is the strongest actionable flag.</strong> Applicants with a credit-to-income ratio above <span class="stat">3.5×</span> are significantly more likely to default. This threshold is addressable at the point of application without model deployment.
+          <strong>External credit scores are the dominant predictor.</strong> <span class="stat">EXT_SOURCE_2</span> is the #1 feature. Applicants scoring below <span class="stat">0.3</span> have a <span class="stat">15.88%</span> default rate — <strong>3.5× higher</strong> than those above 0.6 (4.56%).
         </div>
       </div>
 
       <div class="finding">
         <div class="finding-num">2</div>
         <div class="finding-text">
-          <strong>External credit scores dominate prediction.</strong> <span class="stat">EXT_SOURCE_2</span> and <span class="stat">EXT_SOURCE_3</span> are the top two SHAP features. Applicants scoring below 0.3 on EXT_SOURCE_2 show a materially higher default rate than those above 0.6.
+          <strong>Debt burden shows a non-linear risk pattern.</strong> The highest default rate (<span class="stat">8.81%</span>) occurs in the <span class="stat">2x–3.5x</span> credit-to-income band — not at the highest debt levels — suggesting compensating factors like higher income or better credit scores.
         </div>
       </div>
 
       <div class="finding">
         <div class="finding-num">3</div>
         <div class="finding-text">
-          <strong>Thin-file applicants are a high-risk blind spot.</strong> Borrowers with no prior bureau history show an elevated default rate — yet are often approved on income alone. Alternative scoring signals are needed for this segment.
+          <strong>Employment tenure is a material risk factor.</strong> Borrowers employed less than one year default at <span class="stat">10.98%</span> vs. <span class="stat">6.41%</span> for those employed over 5 years — a <strong>1.7× risk multiplier</strong>.
         </div>
       </div>
 
       <div class="finding">
         <div class="finding-num">4</div>
         <div class="finding-text">
-          <strong>Employment tenure matters at the margin.</strong> Shorter employment duration (<span class="stat">&lt;1 year</span>) correlates with higher default, particularly when combined with high annuity-to-income ratios.
+          <strong>Model achieves 0.737 ROC-AUC.</strong> The Random Forest classifier significantly outperforms random guessing (0.5) and improves on logistic regression baselines, providing reliable default probability estimates.
         </div>
       </div>
     </div>
 
-    <!-- RIGHT: RISK SEGMENTS + METHODOLOGY -->
+    <!-- RIGHT: RISK SEGMENTS — UPDATED WITH REAL RATES -->
     <div>
       <div class="section-title">Risk Segmentation</div>
       <table class="risk-table" style="margin-bottom: 18px;">
@@ -433,28 +433,28 @@
         </thead>
         <tbody>
           <tr>
-            <td>Credit/Income &gt; 3.5× + Low EXT_SOURCE</td>
-            <td>[X]%</td>
+            <td>EXT_SOURCE_2 &lt; 0.3 (Low Credit Score)</td>
+            <td>15.88%</td>
             <td class="risk-high">High</td>
           </tr>
           <tr>
-            <td>No bureau history + High annuity ratio</td>
-            <td>[X]%</td>
+            <td>Employed &lt; 1 year</td>
+            <td>10.98%</td>
             <td class="risk-high">High</td>
           </tr>
           <tr>
-            <td>Employed &lt;1yr + Credit/Income 2–3.5×</td>
-            <td>[X]%</td>
+            <td>Credit/Income 2x–3.5x (Medium DTI)</td>
+            <td>8.81%</td>
             <td class="risk-med">Medium</td>
           </tr>
           <tr>
-            <td>EXT_SOURCE_2 &gt; 0.5, employed &gt;2yr</td>
-            <td>[X]%</td>
+            <td>Employed &gt; 5 years</td>
+            <td>6.41%</td>
             <td class="risk-low">Low</td>
           </tr>
           <tr>
-            <td>All features favourable</td>
-            <td>[X]%</td>
+            <td>EXT_SOURCE_2 &gt; 0.6 (High Credit Score)</td>
+            <td>4.56%</td>
             <td class="risk-low">Low</td>
           </tr>
         </tbody>
@@ -464,7 +464,7 @@
       <div class="method-steps">
         <div class="step">
           <div class="step-label">Data</div>
-          <div class="step-text">307K applications + bureau history. Missing values imputed; class imbalance handled via <span class="tag">scale_pos_weight</span>.</div>
+          <div class="step-text">307K applications + bureau history. Missing values imputed; class imbalance handled via <span class="tag">class_weight='balanced'</span>.</div>
         </div>
         <div class="step">
           <div class="step-label">Features</div>
@@ -472,34 +472,34 @@
         </div>
         <div class="step">
           <div class="step-label">Model</div>
-          <div class="step-text"><span class="tag">XGBoost</span> tuned via RandomizedSearchCV. Baseline: logistic regression. Evaluation: ROC-AUC on stratified holdout.</div>
+          <div class="step-text"><span class="tag">Random Forest</span> with 150 estimators, max_depth=10, min_samples_split=100. Evaluation: ROC-AUC on 20% stratified holdout.</div>
         </div>
         <div class="step">
           <div class="step-label">Explain</div>
-          <div class="step-text"><span class="tag">SHAP</span> TreeExplainer used to surface per-feature impact on default probability — interpretable for non-technical stakeholders.</div>
+          <div class="step-text">Feature importance analysis identifies <span class="tag">EXT_SOURCE_2</span> as the dominant predictor — interpretable for non-technical credit officers.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- RECOMMENDATIONS -->
+  <!-- RECOMMENDATIONS — TAILORED TO YOUR FINDINGS -->
   <div class="full-width">
     <div class="section-title">Recommendations</div>
     <div class="rec-grid">
       <div class="rec-card priority-high">
         <div class="rec-tag">● Immediate</div>
-        <div class="rec-title">Introduce Credit-to-Income Hard Threshold</div>
-        <div class="rec-body">Flag applications with credit/income ratio above 3.5× for manual review. Implement as a pre-model rule to catch the highest-risk segment before scoring.</div>
+        <div class="rec-title">Prioritise Low Credit Score Flagging</div>
+        <div class="rec-body">Applicants with EXT_SOURCE_2 below 0.3 show 15.88% default rates. Implement enhanced review or additional verification for this segment.</div>
       </div>
       <div class="rec-card priority-med">
         <div class="rec-tag">● Medium-Term</div>
         <div class="rec-title">Deploy Model Score as Decision Supplement</div>
-        <div class="rec-body">Integrate XGBoost default probability as a second input alongside existing credit bureau checks. Target high-recall threshold to minimise missed defaults.</div>
+        <div class="rec-body">Integrate Random Forest default probability (ROC-AUC 0.737) alongside bureau checks. Target high-recall threshold to capture 80% of defaults.</div>
       </div>
       <div class="rec-card priority-low">
         <div class="rec-tag">● Strategic</div>
-        <div class="rec-title">Build Alternative Scoring for Thin-File Applicants</div>
-        <div class="rec-body">Bureau-null applicants represent a growing segment. Explore telco, transactional, or employment verification data to reduce blind-spot defaults in this group.</div>
+        <div class="rec-title">Investigate Medium DTI Segment</div>
+        <div class="rec-body">The 2x–3.5x credit-to-income band shows peak default risk (8.81%). Further segmentation analysis could uncover specific risk drivers within this group.</div>
       </div>
     </div>
   </div>
@@ -508,12 +508,12 @@
   <div class="footer">
     <div class="footer-left">
       <strong>Alexander Gaudi Suhandjaja</strong> · Data Science & Engineering, HKU<br>
-      github.com/GaudiHan/credit-risk-default · linkedin.com/in/gaudihan
+      github.com/GaudiHan/Credit-Risk-Default-Prediction · linkedin.com/in/gaudihan
     </div>
     <div class="footer-right">
       <span class="skill-pill">Python</span>
-      <span class="skill-pill">XGBoost</span>
-      <span class="skill-pill">SHAP</span>
+      <span class="skill-pill">Random Forest</span>
+      <span class="skill-pill">Scikit-learn</span>
       <span class="skill-pill">Power BI</span>
       <span class="skill-pill">Feature Engineering</span>
     </div>
