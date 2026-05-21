@@ -26,23 +26,25 @@ Traditional credit scoring often excludes applicants with limited credit history
 ```
 credit-risk-default/
 │
-├── data/                        # Raw data (not committed — see Data section)
+├── data/                               # Raw data (not committed — see Data section)
 │   ├── application_train.csv
 │   ├── application_test.csv
 │   └── bureau.csv
 │
 ├── notebooks/
-│   ├── 01_eda.ipynb             # Exploratory data analysis & visualisation
-│   ├── 02_feature_engineering.ipynb   # Feature creation & preprocessing
-│   └── 03_modelling.ipynb       # Model training, evaluation & SHAP analysis
+│   ├── 01_eda.ipynb                    # Exploratory data analysis & visualisation
+│   ├── 02_feature_engineering.ipynb    # Feature creation & preprocessing
+│   ├── 03_modelling.ipynb              # RandomForest Model training and evaluation
+│   └── 04_xgboost_modelling.ipynb      # XGBoost Model training, evaluation & SHAP analysis
 │
 ├── outputs/
-│   ├── figures/                 # All saved charts
-│   ├── model/                   # Saved XGBoost model (.pkl)
-│   └── consulting_summary.pdf   # 1-page business summary
+│   ├── data/                           # Saved training data
+│   ├── figures/                        # All saved charts
+│   ├── models/                         # Saved models (.pkl)
+│   └── results/                        # Various process results
 │
 ├── dashboard/
-│   └── credit_risk_dashboard.pbix   # Power BI file
+│   └── credit_risk_dashboard.pbix      # Power BI file
 │
 ├── requirements.txt
 └── README.md
