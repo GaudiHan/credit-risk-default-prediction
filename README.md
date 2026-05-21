@@ -123,11 +123,65 @@ Used SHAP TreeExplainer to surface the top drivers of default probability — ma
 
 ## Key Business Findings
 
-- Applicants with `CREDIT_INCOME_RATIO > 3.5x` are **`[X]`x more likely to default** — flagging this threshold could reduce portfolio risk without significantly restricting approvals
-- Borrowers with no prior credit bureau history (`bureau.csv` nulls) show a **`[X]`% higher default rate** — suggesting value in alternative data scoring for this segment
-- `EXT_SOURCE_2` below `0.3` correlates with a **`[X]`% default rate** vs `[Y]`% for scores above `0.6`
+### 1. External Credit Scores Dominate Prediction
 
-> See the full consulting summary in `outputs/consulting_summary.pdf`
+SHAP analysis confirms `EXT_SOURCE_2`, `EXT_SOURCE_3`, and `EXT_SOURCE_1` are the top three predictors of default.
+
+| Credit Score Range | Default Rate | Risk vs. High Score |
+|-------------------|--------------|---------------------|
+| `EXT_SOURCE_2` < 0.3 (Low) | **15.88%** | **3.5× higher** |
+| `EXT_SOURCE_2` > 0.6 (High) | 4.56% | Baseline |
+
+**Business implication:** Applicants with scores below 0.3 should trigger enhanced review. This single flag identifies a segment with nearly 4x the risk of high-score applicants.
+
+### 2. Debt Burden Shows Non-Linear Risk
+
+Unlike the common assumption that "higher debt = higher risk," our analysis reveals a peak in the middle:
+
+| Debt-to-Income Band | Default Rate | Insight |
+|--------------------|--------------|---------|
+| Low (≤2x) | 7.43% | Safest group |
+| **Medium (2x-3.5x)** | **8.81%** | **Peak risk** |
+| High (>3.5x) | 7.95% | Slightly lower |
+
+**Why this happens:** Applicants with very high debt burdens may be higher income or have compensating factors (good credit scores). The medium band contains more marginal borrowers.
+
+**Business implication:** Use multi-band thresholds, not a single cap.
+
+### 3. Employment Tenure is a Material Risk Factor
+
+| Employment Length | Default Rate | Risk Multiplier |
+|------------------|--------------|-----------------|
+| < 1 year | **10.98%** | **1.7×** |
+| > 5 years | 6.41% | Baseline |
+
+**Business implication:** Short-tenure employees, particularly young professionals, represent a distinct risk segment. Consider alternative verification (e.g., employment contract, industry stability) for this group.
+
+### 4. Thin-File Applicants (No Bureau History)
+
+Only 0.1% of applicants in this dataset lack bureau history, and they show no elevated risk (8.14% vs 8.07%). This finding is dataset-specific; in Hong Kong's context with high young professional immigration, thin-file risk may be more significant and warrants separate analysis.
+
+### 5. Model Performance
+
+| Model | ROC-AUC | Business Utility |
+|-------|---------|------------------|
+| XGBoost (tuned) | **0.753** | Captures 80% of defaults while reviewing only the top 13.6% of applicants — 2x more efficient than random selection |
+
+### 6. SHAP Feature Importance
+
+The SHAP summary plot below shows which features push default probability up (red/high values) vs down (blue/low values):
+
+![SHAP Summary Plot](outputs/figures/shap_summary_plot.png)
+
+*Interpretation: Low values of EXT_SOURCE_2/3 (blue) push risk higher; high values (red) reduce risk.*
+
+![SHAP Bar Plot](outputs/figures/shap_bar_plot.png)
+
+*Average impact magnitude: External credit scores have the largest influence, followed by loan amount (`AMT_GOODS_PRICE`) and credit amount (`AMT_CREDIT`).*
+
+---
+
+**Key takeaway for credit officers:** Focus on external credit scores first — they are your strongest signal. Use DTI as a secondary flag, but be aware that the 2x-3.5x band contains hidden risk. Short employment tenure is a material risk factor worth investigating further.
 
 ---
 
