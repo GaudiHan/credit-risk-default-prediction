@@ -364,18 +364,18 @@
     </div>
   </div>
 
-  <!-- METRICS — UPDATED WITH REAL NUMBERS -->
+  <!-- METRICS — UPDATED WITH XGBOOST RESULTS -->
   <div class="metrics">
     <div class="metric-card">
-      <div class="value">0.737</div>
-      <div class="label">ROC-AUC<br>Random Forest Model</div>
+      <div class="value">0.753</div>
+      <div class="label">ROC-AUC<br>XGBoost Model</div>
     </div>
     <div class="metric-card">
       <div class="value">307K</div>
       <div class="label">Loan Applications<br>Analysed</div>
     </div>
     <div class="metric-card">
-      <div class="value">8.2%</div>
+      <div class="value">8.1%</div>
       <div class="label">Portfolio Default<br>Rate (baseline)</div>
     </div>
     <div class="metric-card">
@@ -472,12 +472,11 @@
         </div>
         <div class="step">
           <div class="step-label">Model</div>
-          <div class="step-text"><span class="tag">Random Forest</span> with 150 estimators, max_depth=10, min_samples_split=100. Evaluation: ROC-AUC on 20% stratified holdout.</div>
+          <div class="step-text"><span class="tag">XGBoost</span> with hyperparameter tuning (RandomizedSearchCV). Achieved <span class="tag">ROC-AUC 0.753</span> — captures 80% of defaults at 13.6% precision.</div>
         </div>
         <div class="step">
           <div class="step-label">Explain</div>
-          <div class="step-text">Feature importance analysis identifies <span class="tag">EXT_SOURCE_2</span> as the dominant predictor — interpretable for non-technical credit officers.</div>
-        </div>
+          <div class="step-text"><span class="tag">SHAP</span> TreeExplainer identifies EXT_SOURCE_2 as the dominant predictor. <span class="tag">Feature importance</span> available for stakeholders.</div>        </div>
       </div>
     </div>
   </div>
