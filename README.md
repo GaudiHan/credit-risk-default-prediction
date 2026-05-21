@@ -201,8 +201,8 @@ Built in Power BI with three views:
 
 ```bash
 # Clone the repo
-git clone https://github.com/GaudiHan/credit-risk-default.git
-cd credit-risk-default
+git clone https://github.com/GaudiHan/Credit-Risk-Default-Prediction.git
+cd Credit-Risk-Default-Prediction
 
 # Install dependencies
 pip install -r requirements.txt
@@ -237,5 +237,3 @@ jupyter==1.0.0
 
 **Alexander Gaudi Suhandjaja**
 [linkedin.com/in/gaudihan](https://linkedin.com/in/gaudihan) · [github.com/GaudiHan](https://github.com/GaudiHan)
-
-*Final-year Data Science & Engineering student at HKU | Targeting Data Analyst roles in Hong Kong*
