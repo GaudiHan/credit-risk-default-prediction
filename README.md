@@ -111,6 +111,16 @@ Used SHAP TreeExplainer to surface the top drivers of default probability — ma
 
 ---
 
+## Model Performance
+
+| Model | ROC-AUC | Precision@80%Recall | Notes |
+|-------|---------|---------------------|-------|
+| Random Forest (baseline) | 0.701 | — | Simple, no tuning |
+| Random Forest (optimized) | 0.737 | — | class_weight='balanced' |
+| **XGBoost (tuned)** | **0.753** | **13.6%** | RandomizedSearchCV, SHAP |
+
+---
+
 ## Key Business Findings
 
 - Applicants with `CREDIT_INCOME_RATIO > 3.5x` are **`[X]`x more likely to default** — flagging this threshold could reduce portfolio risk without significantly restricting approvals
