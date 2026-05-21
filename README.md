@@ -3,6 +3,20 @@
 
 ---
 
+## Key Metrics at a Glance
+
+| Metric | Value |
+|--------|-------|
+| Dataset size | 307,511 applications |
+| Default rate | 8.07% |
+| XGBoost ROC-AUC | **0.753** |
+| Low credit score (<0.3) default rate | 15.88% (3.5× risk) |
+| Short employment (<1 year) default rate | 10.98% (1.7× risk) |
+| Peak DTI risk band | 2x-3.5x (8.81% default) |
+| Precision at 80% recall | 13.6% (2× better than random) |
+
+---
+
 ## Overview
 
 This project builds a full credit risk analytics pipeline on the [Home Credit Default Risk dataset](https://www.kaggle.com/c/home-credit-default-risk/data) (307,511 applicants, 122 features). The goal is to predict the probability that a borrower will default on a loan — framed not just as a modelling exercise, but as a business decision-support tool for credit officers.
