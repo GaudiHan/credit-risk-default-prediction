@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Risk Analytics — Executive Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #0f2240;
+    --navy-mid: #1a3a6b;
+    --accent: #c8922a;
+    --accent-light: #f5ecd7;
+    --text: #1a1a2e;
+    --muted: #5a6275;
+    --rule: #dce3ee;
+    --bg: #f7f8fc;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; margin: 0; max-width: 100%; }
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    padding: 32px 16px;
+    min-height: 100vh;
+  }
+
+  .page {
+    background: white;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 52px 40px;
+    box-shadow: 0 4px 40px rgba(15,34,64,0.10);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 20px;
+    border-bottom: 2.5px solid var(--navy);
+    margin-bottom: 24px;
+  }
+
+  .header-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+  }
+
+  .header-left .subtitle {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+  }
+
+  .meta {
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ── METRICS ROW ── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .metric-card {
+    background: var(--navy);
+    color: white;
+    padding: 14px 14px 12px;
+    border-radius: 3px;
+  }
+
+  .metric-card .value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .metric-card .label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.3;
+  }
+
+  /* ── BODY GRID ── */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-bottom: 22px;
+  }
+
+  .section-title {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  /* ── FINDINGS ── */
+  .finding {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .finding-num {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-light);
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 1px;
+  }
+
+  .finding-text {
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  .finding-text strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .finding-text .stat {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 10.5px;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* ── RISK TABLE ── */
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+  }
+
+  .risk-table th {
+    background: var(--navy);
+    color: white;
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 7px 10px;
+    text-align: left;
+  }
+
+  .risk-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .risk-table tr:last-child td { border-bottom: none; }
+  .risk-table tr:nth-child(even) td { background: #f7f9fd; }
+
+  .risk-high { color: #c0392b; font-weight: 600; }
+  .risk-med  { color: #d4890a; font-weight: 600; }
+  .risk-low  { color: #27ae60; font-weight: 600; }
+
+  /* ── METHODOLOGY ── */
+  .method-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: flex-start;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-label {
+    flex-shrink: 0;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 76px;
+    padding-top: 1px;
+  }
+
+  .step-text {
+    font-size: 10.5px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .tag {
+    display: inline-block;
+    background: #eef2f9;
+    color: var(--navy-mid);
+    font-size: 9px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-right: 3px;
+  }
+
+  /* ── RECOMMENDATIONS ── */
+  .full-width {
+    margin-bottom: 22px;
+  }
+
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .rec-card {
+    border: 1.5px solid var(--rule);
+    border-top: 3px solid var(--navy);
+    padding: 12px 12px 10px;
+    border-radius: 2px;
+  }
+
+  .rec-card.priority-high { border-top-color: #c0392b; }
+  .rec-card.priority-med  { border-top-color: var(--accent); }
+  .rec-card.priority-low  { border-top-color: #27ae60; }
+
+  .rec-tag {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .priority-high .rec-tag { color: #c0392b; }
+  .priority-med  .rec-tag { color: var(--accent); }
+  .priority-low  .rec-tag { color: #27ae60; }
+
+  .rec-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .rec-body {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1.5px solid var(--rule);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-size: 9.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .footer-left strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .skill-pill {
+    background: var(--navy);
+    color: rgba(255,255,255,0.85);
+    font-size: 8.5px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Credit Risk Default Prediction<br><em>Executive Summary</em></h1>
+      <div class="subtitle">Home Credit Default Risk Dataset · 307,511 applicants · 122 features</div>
+    </div>
+    <div class="header-right">
+      <div class="badge">Analytical Report</div>
+      <div class="meta">
+        Prepared by: Alexander Gaudi Suhandjaja<br>
+        Date: [Month Year]<br>
+        github.com/GaudiHan/credit-risk-default
+      </div>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric-card">
+      <div class="value">0.83</div>
+      <div class="label">ROC-AUC<br>XGBoost Model</div>
+    </div>
+    <div class="metric-card">
+      <div class="value">307K</div>
+      <div class="label">Loan Applications<br>Analysed</div>
+    </div>
+    <div class="metric-card">
+      <div class="value">~8%</div>
+      <div class="label">Portfolio Default<br>Rate (baseline)</div>
+    </div>
+    <div class="metric-card">
+      <div class="value">3.5×</div>
+      <div class="label">Risk Threshold<br>Credit-to-Income</div>
+    </div>
+  </div>
+
+  <!-- BODY GRID -->
+  <div class="body-grid">
+
+    <!-- LEFT: KEY FINDINGS -->
+    <div>
+      <div class="section-title">Key Findings</div>
+
+      <div class="finding">
+        <div class="finding-num">1</div>
+        <div class="finding-text">
+          <strong>Debt burden is the strongest actionable flag.</strong> Applicants with a credit-to-income ratio above <span class="stat">3.5×</span> are significantly more likely to default. This threshold is addressable at the point of application without model deployment.
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-num">2</div>
+        <div class="finding-text">
+          <strong>External credit scores dominate prediction.</strong> <span class="stat">EXT_SOURCE_2</span> and <span class="stat">EXT_SOURCE_3</span> are the top two SHAP features. Applicants scoring below 0.3 on EXT_SOURCE_2 show a materially higher default rate than those above 0.6.
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-num">3</div>
+        <div class="finding-text">
+          <strong>Thin-file applicants are a high-risk blind spot.</strong> Borrowers with no prior bureau history show an elevated default rate — yet are often approved on income alone. Alternative scoring signals are needed for this segment.
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-num">4</div>
+        <div class="finding-text">
+          <strong>Employment tenure matters at the margin.</strong> Shorter employment duration (<span class="stat">&lt;1 year</span>) correlates with higher default, particularly when combined with high annuity-to-income ratios.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: RISK SEGMENTS + METHODOLOGY -->
+    <div>
+      <div class="section-title">Risk Segmentation</div>
+      <table class="risk-table" style="margin-bottom: 18px;">
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Default Rate</th>
+            <th>Risk Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Credit/Income &gt; 3.5× + Low EXT_SOURCE</td>
+            <td>[X]%</td>
+            <td class="risk-high">High</td>
+          </tr>
+          <tr>
+            <td>No bureau history + High annuity ratio</td>
+            <td>[X]%</td>
+            <td class="risk-high">High</td>
+          </tr>
+          <tr>
+            <td>Employed &lt;1yr + Credit/Income 2–3.5×</td>
+            <td>[X]%</td>
+            <td class="risk-med">Medium</td>
+          </tr>
+          <tr>
+            <td>EXT_SOURCE_2 &gt; 0.5, employed &gt;2yr</td>
+            <td>[X]%</td>
+            <td class="risk-low">Low</td>
+          </tr>
+          <tr>
+            <td>All features favourable</td>
+            <td>[X]%</td>
+            <td class="risk-low">Low</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title">Methodology</div>
+      <div class="method-steps">
+        <div class="step">
+          <div class="step-label">Data</div>
+          <div class="step-text">307K applications + bureau history. Missing values imputed; class imbalance handled via <span class="tag">scale_pos_weight</span>.</div>
+        </div>
+        <div class="step">
+          <div class="step-label">Features</div>
+          <div class="step-text">4 engineered features (debt burden, repayment affordability, employment stability, bureau exposure) added to 122 base features.</div>
+        </div>
+        <div class="step">
+          <div class="step-label">Model</div>
+          <div class="step-text"><span class="tag">XGBoost</span> tuned via RandomizedSearchCV. Baseline: logistic regression. Evaluation: ROC-AUC on stratified holdout.</div>
+        </div>
+        <div class="step">
+          <div class="step-label">Explain</div>
+          <div class="step-text"><span class="tag">SHAP</span> TreeExplainer used to surface per-feature impact on default probability — interpretable for non-technical stakeholders.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="full-width">
+    <div class="section-title">Recommendations</div>
+    <div class="rec-grid">
+      <div class="rec-card priority-high">
+        <div class="rec-tag">● Immediate</div>
+        <div class="rec-title">Introduce Credit-to-Income Hard Threshold</div>
+        <div class="rec-body">Flag applications with credit/income ratio above 3.5× for manual review. Implement as a pre-model rule to catch the highest-risk segment before scoring.</div>
+      </div>
+      <div class="rec-card priority-med">
+        <div class="rec-tag">● Medium-Term</div>
+        <div class="rec-title">Deploy Model Score as Decision Supplement</div>
+        <div class="rec-body">Integrate XGBoost default probability as a second input alongside existing credit bureau checks. Target high-recall threshold to minimise missed defaults.</div>
+      </div>
+      <div class="rec-card priority-low">
+        <div class="rec-tag">● Strategic</div>
+        <div class="rec-title">Build Alternative Scoring for Thin-File Applicants</div>
+        <div class="rec-body">Bureau-null applicants represent a growing segment. Explore telco, transactional, or employment verification data to reduce blind-spot defaults in this group.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      <strong>Alexander Gaudi Suhandjaja</strong> · Data Science & Engineering, HKU<br>
+      github.com/GaudiHan/credit-risk-default · linkedin.com/in/gaudihan
+    </div>
+    <div class="footer-right">
+      <span class="skill-pill">Python</span>
+      <span class="skill-pill">XGBoost</span>
+      <span class="skill-pill">SHAP</span>
+      <span class="skill-pill">Power BI</span>
+      <span class="skill-pill">Feature Engineering</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
