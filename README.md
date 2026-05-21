@@ -19,17 +19,17 @@
 
 ## Overview
 
-This project builds a full credit risk analytics pipeline on the [Home Credit Default Risk dataset](https://www.kaggle.com/c/home-credit-default-risk/data) (307,511 applicants, 122 features). The goal is to predict the probability that a borrower will default on a loan — framed not just as a modelling exercise, but as a business decision-support tool for credit officers.
+This project builds a full credit risk analytics pipeline on the [Home Credit Default Risk dataset](https://www.kaggle.com/c/home-credit-default-risk/data) (307,511 applicants, 122 features). The goal is to predict the probability that a borrower will default on a loan. This project is intended to be a modelling exercise and a business decision-support tool for credit officers.
 
-**Final model:** XGBoost classifier · ROC-AUC: `[your score]` · Precision@10%: `[your score]`
+**Final model:** XGBoost classifier · ROC-AUC: **0.753** · Precision@80%Recall: **13.6%**
 
-> 📊 [View the interactive Power BI dashboard](#) ← replace with your link
+> 📊 [View the interactive Power BI dashboard](#) ← coming soon
 
 ---
 
 ## Business Context
 
-Traditional credit scoring often excludes applicants with limited credit history, creating both financial risk and missed opportunity for lenders. This analysis uses alternative applicant data — income, employment, family status, prior credit bureau behaviour — to build a more complete default risk picture.
+Traditional credit scoring often excludes applicants with limited credit history, creating both financial risk and missed opportunity for lenders. This analysis uses alternative applicant data such as income, employment, family status, and prior credit bureau behaviour to build a more complete default risk picture.
 
 **Key question answered:** *Which borrower segments carry disproportionate default risk, and what variables drive those outcomes?*
 
@@ -106,14 +106,15 @@ Created domain-driven features grounded in credit analysis logic:
 | `CREDIT_INCOME_RATIO` | `AMT_CREDIT / AMT_INCOME_TOTAL` | Debt burden relative to income |
 | `ANNUITY_INCOME_RATIO` | `AMT_ANNUITY / AMT_INCOME_TOTAL` | Monthly repayment affordability |
 | `EMPLOYMENT_TO_AGE_RATIO` | `DAYS_EMPLOYED / DAYS_BIRTH` | Job stability relative to career stage |
-| `BUREAU_ACTIVE_LOANS` | Aggregated from `bureau.csv` | Current external credit exposure |
+| `FAMILY_SIZE` | `CNT_FAM_MEMBERS + 1` | Household size impact on repayment capacity |
 
 ### 3. Modelling
 
 | Model | ROC-AUC | Notes |
-|---|---|---|
-| Logistic Regression (baseline) | `[score]` | After scaling & imputation |
-| XGBoost | `[score]` | Tuned via RandomizedSearchCV |
+|-------|---------|-------|
+| Random Forest (baseline) | 0.701 | Simple, no tuning |
+| Random Forest (optimised) | 0.737 | class_weight='balanced' |
+| **XGBoost (tuned)** | **0.753** | RandomizedSearchCV, SHAP analysis |
 
 ### 4. Explainability (SHAP)
 Used SHAP TreeExplainer to surface the top drivers of default probability — making the model interpretable for non-technical credit officers.
@@ -121,9 +122,9 @@ Used SHAP TreeExplainer to surface the top drivers of default probability — ma
 **Top predictors of default:**
 1. `EXT_SOURCE_2` — external credit score (lower = higher risk)
 2. `EXT_SOURCE_3` — secondary credit score
-3. `CREDIT_INCOME_RATIO` — high debt-to-income flags elevated risk
-4. `DAYS_EMPLOYED` — shorter employment tenure correlates with default
-5. `AMT_GOODS_PRICE` — loan purpose and size matter
+3. `AMT_GOODS_PRICE` — loan purpose and size matter
+4. `EXT_SOURCE_1` — tertiary credit score
+5. `AMT_CREDIT` — total credit amount
 
 ---
 
@@ -177,13 +178,7 @@ Unlike the common assumption that "higher debt = higher risk," our analysis reve
 
 Only 0.1% of applicants in this dataset lack bureau history, and they show no elevated risk (8.14% vs 8.07%). This finding is dataset-specific; in Hong Kong's context with high young professional immigration, thin-file risk may be more significant and warrants separate analysis.
 
-### 5. Model Performance
-
-| Model | ROC-AUC | Business Utility |
-|-------|---------|------------------|
-| XGBoost (tuned) | **0.753** | Captures 80% of defaults while reviewing only the top 13.6% of applicants — 2x more efficient than random selection |
-
-### 6. SHAP Feature Importance
+### 5. SHAP Feature Importance
 
 The SHAP summary plot below shows which features push default probability up (red/high values) vs down (blue/low values):
 
