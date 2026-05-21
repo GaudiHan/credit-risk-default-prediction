@@ -10,10 +10,10 @@
 | Dataset size | 307,511 applications |
 | Default rate | 8.07% |
 | XGBoost ROC-AUC | **0.753** |
-| Low credit score (<0.3) default rate | 15.88% (3.5× risk) |
-| Short employment (<1 year) default rate | 10.98% (1.7× risk) |
+| Low credit score (<0.3) default rate | 15.88% (3.5x risk) |
+| Short employment (<1 year) default rate | 10.98% (1.7x risk) |
 | Peak DTI risk band | 2x-3.5x (8.81% default) |
-| Precision at 80% recall | 13.6% (2× better than random) |
+| Precision at 80% recall | 13.6% (2x better than random) |
 
 ---
 
@@ -146,7 +146,7 @@ SHAP analysis confirms `EXT_SOURCE_2`, `EXT_SOURCE_3`, and `EXT_SOURCE_1` are th
 
 | Credit Score Range | Default Rate | Risk vs. High Score |
 |-------------------|--------------|---------------------|
-| `EXT_SOURCE_2` < 0.3 (Low) | **15.88%** | **3.5× higher** |
+| `EXT_SOURCE_2` < 0.3 (Low) | **15.88%** | **3.5x higher** |
 | `EXT_SOURCE_2` > 0.6 (High) | 4.56% | Baseline |
 
 **Business implication:** Applicants with scores below 0.3 should trigger enhanced review. This single flag identifies a segment with nearly 4x the risk of high-score applicants.
@@ -169,7 +169,7 @@ Unlike the common assumption that "higher debt = higher risk," our analysis reve
 
 | Employment Length | Default Rate | Risk Multiplier |
 |------------------|--------------|-----------------|
-| < 1 year | **10.98%** | **1.7×** |
+| < 1 year | **10.98%** | **1.7x** |
 | > 5 years | 6.41% | Baseline |
 
 **Business implication:** Short-tenure employees, particularly young professionals, represent a distinct risk segment. Consider alternative verification (e.g., employment contract, industry stability) for this group.
