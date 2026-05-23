@@ -3,7 +3,7 @@
 
 ---
 
-## Key Metrics at a Glance
+## Quick Look at Key Metrics 
 
 | Metric | Value |
 |--------|-------|
@@ -39,51 +39,51 @@ Traditional credit scoring often excludes applicants with limited credit history
 
 ```
 credit-risk-default/
-│
-├── data/                               # Raw data (not committed — see Data section)
+│ 
+├── data/                               # Raw data (not committed, exceed file limit, see the following Data section)
 │   ├── application_train.csv
 │   ├── application_test.csv
 │   └── bureau.csv
-│
+│   
 ├── notebooks/
 │   ├── 01_eda.ipynb                    # Exploratory data analysis & visualisation
 │   ├── 02_feature_engineering.ipynb    # Feature creation & preprocessing
 │   ├── 03_modelling.ipynb              # RandomForest Model training and evaluation
 │   └── 04_xgboost_modelling.ipynb      # XGBoost Model training, evaluation & SHAP analysis
-│
+│ 
 ├── outputs/
 │   ├── data/                           # Saved training data
 │   ├── figures/                        # All saved charts
 │   ├── models/                         # Saved models (.pkl)
 │   └── results/                        # Various process results
 │
-├── dashboard/
-│   └── credit_risk_dashboard.pbix      # Power BI file
+├── dashboard/                          # CSVs and Power BI file for dashboard
+│  
 │
 ├── requirements.txt
 └── README.md
 ```
-
+ 
 ---
 
 ## Data
 
-**Source:** [Kaggle — Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/data) (free, requires Kaggle account)
+**Source:** [Kaggle — Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/data)  
 
 **Tables used:**
 
-| File | Rows | Description |
+| File | Rows | Description | 
 |---|---|---|
-| `application_train.csv` | 307,511 | Core application data with target variable |
+| `application_train.csv` | 307,511 | Core application data with target variable | 
 | `application_test.csv` | 48,744 | Holdout set for final predictions |
-| `bureau.csv` | 1,716,428 | Prior credit bureau records per applicant |
+| `bureau.csv` | 1,716,428 | Prior credit bureau records per applicant | 
 
-**Target variable:** `TARGET` — 1 = payment difficulties (default), 0 = repaid on time
+**Target variable:** `TARGET` — 1 = payment difficulties (default), 0 = repaid on time   
 
 **Class imbalance:** ~8% positive class. Handled via `scale_pos_weight` in XGBoost.
 
 To download via Kaggle CLI:
-```bash
+```bash 
 pip install kaggle
 kaggle competitions download -c home-credit-default-risk
 unzip home-credit-default-risk.zip -d data/
@@ -94,19 +94,19 @@ unzip home-credit-default-risk.zip -d data/
 ## Methodology
 
 ### 1. Exploratory Data Analysis
-- Profiled 122 features across 307K applicants
-- Identified class imbalance (8% default rate) and missing value patterns
-- Key finding: `EXT_SOURCE_1/2/3` (external credit scores) are the strongest predictors
+- Profiled 122 features across 307K applicants 
+- Identified class imbalance (8% default rate) and missing value patterns 
+- Key finding: `EXT_SOURCE_1/2/3` (external credit scores) are the strongest predictors 
 
 ### 2. Feature Engineering
-Created domain-driven features grounded in credit analysis logic:
+Created domain-driven features grounded in credit analysis logic: 
 
 | Feature | Formula | Rationale |
-|---|---|---|
+|---|---|---| 
 | `CREDIT_INCOME_RATIO` | `AMT_CREDIT / AMT_INCOME_TOTAL` | Debt burden relative to income |
 | `ANNUITY_INCOME_RATIO` | `AMT_ANNUITY / AMT_INCOME_TOTAL` | Monthly repayment affordability |
 | `EMPLOYMENT_TO_AGE_RATIO` | `DAYS_EMPLOYED / DAYS_BIRTH` | Job stability relative to career stage |
-| `FAMILY_SIZE` | `CNT_FAM_MEMBERS + 1` | Household size impact on repayment capacity |
+| `FAMILY_SIZE` | `CNT_FAM_MEMBERS + 1` | Household size impact on repayment capacity |  
 
 ### 3. Modelling
 
@@ -140,7 +140,7 @@ Used SHAP TreeExplainer to surface the top drivers of default probability — ma
 
 ## Key Business Findings
 
-### 1. External Credit Scores Dominate Prediction
+### 1. External Credit Scores Dominate Prediction 
 
 SHAP analysis confirms `EXT_SOURCE_2`, `EXT_SOURCE_3`, and `EXT_SOURCE_1` are the top three predictors of default.
 
@@ -151,7 +151,7 @@ SHAP analysis confirms `EXT_SOURCE_2`, `EXT_SOURCE_3`, and `EXT_SOURCE_1` are th
 
 **Business implication:** Applicants with scores below 0.3 should trigger enhanced review. This single flag identifies a segment with nearly 4x the risk of high-score applicants.
 
-### 2. Debt Burden Shows Non-Linear Risk
+### 2. Debt Burden Shows Non-Linear Risk 
 
 Unlike the common assumption that "higher debt = higher risk," our analysis reveals a peak in the middle:
 
@@ -174,15 +174,15 @@ Unlike the common assumption that "higher debt = higher risk," our analysis reve
 
 **Business implication:** Short-tenure employees, particularly young professionals, represent a distinct risk segment. Consider alternative verification (e.g., employment contract, industry stability) for this group.
 
-### 4. Thin-File Applicants (No Bureau History)
+### 4. Thin-File Applicants (no bureau history)
 
 Only 0.1% of applicants in this dataset lack bureau history, and they show no elevated risk (8.14% vs 8.07%). This finding is dataset-specific; in Hong Kong's context with high young professional immigration, thin-file risk may be more significant and warrants separate analysis.
-
+ 
 ### 5. SHAP Feature Importance
 
 The SHAP summary plot below shows which features push default probability up (red/high values) vs down (blue/low values):
 
-![SHAP Summary Plot](outputs/figures/shap_summary_plot.png)
+![SHAP Summary Plot](outputs/figures/shap_summary_plot.png) 
 
 *Interpretation: Low values of EXT_SOURCE_2/3 (blue) push risk higher; high values (red) reduce risk.*
 
@@ -204,7 +204,7 @@ Built in Power BI with three views:
 2. **Risk Segmentation** — borrower risk score distribution across key variables
 3. **Model Insights** — SHAP feature importance with business interpretation
 
-> 📊 [View on Tableau Public / Power BI Web](#) ← replace with your published link
+> 📊 [View on Tableau Public / Power BI Web](#) ← coming soon
 
 ---
 
@@ -220,7 +220,7 @@ pip install -r requirements.txt
 
 # Download data (see Data section above)
 
-# Run notebooks in order
+# Run notebooks in the notebooks/ directory in order
 jupyter notebook notebooks/01_eda.ipynb
 ```
 
