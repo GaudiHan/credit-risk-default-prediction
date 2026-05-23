@@ -60,7 +60,10 @@ credit-risk-default/
 ├── dashboard/                          # CSVs and Power BI file for dashboard
 │  
 │
-├── requirements.txt
+├── consulting_summary.html             # Consulting summary
+├── consulting_summary.pdf              # Consulting summary, but pdf
+├── .gitattributes
+├── .gitignore
 └── README.md
 ```
  
