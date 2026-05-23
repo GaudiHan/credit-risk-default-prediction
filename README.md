@@ -49,7 +49,8 @@ credit-risk-default/
 │   ├── 01_eda.ipynb                    # Exploratory data analysis & visualisation
 │   ├── 02_feature_engineering.ipynb    # Feature creation & preprocessing
 │   ├── 03_modelling.ipynb              # RandomForest Model training and evaluation
-│   └── 04_xgboost_modelling.ipynb      # XGBoost Model training, evaluation & SHAP analysis
+│   ├── 04_xgboost_modelling.ipynb      # XGBoost Model training, evaluation & SHAP analysis
+│   └── 05_lightgbm_modelling.ipynb     # LightGBM Model training, evaluation & SHAP analysis
 │ 
 ├── outputs/
 │   ├── data/                           # Saved training data
@@ -114,10 +115,12 @@ Created domain-driven features grounded in credit analysis logic:
 ### 3. Modelling
 
 | Model | ROC-AUC | Notes |
-|-------|---------|-------|
+|-------|---------|-------------|-------|
 | Random Forest (baseline) | 0.701 | Simple, no tuning |
-| Random Forest (optimised) | 0.737 | class_weight='balanced' |
-| **XGBoost (tuned)** | **0.753** | RandomizedSearchCV, SHAP analysis |
+| Random Forest (optimized) | 0.737 | `class_weight='balanced'` |
+| XGBoost (tuned) | **0.753** | RandomizedSearchCV, SHAP |
+| LightGBM (tuned) | 0.752 | Slightly faster training |
+| **Best Model** | **XGBoost 0.753** | Selected for final deployment |
 
 ### 4. Explainability (SHAP)
 Used SHAP TreeExplainer to surface the top drivers of default probability — making the model interpretable for non-technical credit officers.
@@ -133,11 +136,13 @@ Used SHAP TreeExplainer to surface the top drivers of default probability — ma
 
 ## Model Performance
 
-| Model | ROC-AUC | Precision@80%Recall | Notes |
-|-------|---------|---------------------|-------|
+| Model | ROC-AUC | Improvement | Notes |
+|-------|---------|-------------|-------|
 | Random Forest (baseline) | 0.701 | — | Simple, no tuning |
-| Random Forest (optimized) | 0.737 | — | class_weight='balanced' |
-| **XGBoost (tuned)** | **0.753** | **13.6%** | RandomizedSearchCV, SHAP |
+| Random Forest (optimized) | 0.737 | +3.6% | `class_weight='balanced'` |
+| XGBoost (tuned) | **0.753** | **+5.2%** | RandomizedSearchCV, SHAP |
+| LightGBM (tuned) | 0.752 | +5.1% | Slightly faster training |
+| **Best Model** | **XGBoost 0.753** | — | Selected for final deployment |
 
 ---
 
