@@ -3,9 +3,8 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 
-st.title("is working!")
+st.title("is working")
 
-# Create a simple plot
 df = pd.DataFrame({'x': [1, 2, 3], 'y': [4, 5, 6]})
 fig = px.bar(df, x='x', y='y', title="Test Plot")
 st.plotly_chart(fig)

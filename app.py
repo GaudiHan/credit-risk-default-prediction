@@ -14,28 +14,28 @@ import plotly.graph_objects as go
 # ============================================================================
 
 st.set_page_config(
-    page_title="Credit Risk Dashboard",
-    page_icon="📊",
-    layout="wide"
-)
+    page_title="Credit Risk Dashboard", 
+    page_icon="📊", 
+    layout="wide" 
+) 
 
 # ============================================================================
 # LOAD DATA
 # ============================================================================
-
-@st.cache_data
+ 
+@st.cache_data 
 def load_data():
     """Load all CSV files"""
     try:
         predictions = pd.read_csv('outputs/results/xgboost_predictions.csv')
-        segment_analysis = pd.read_csv('outputs/results/segment_analysis.csv')
+        segment_analysis = pd.read_csv('outputs/results/segment_analysis.csv') 
         feature_importance = pd.read_csv('outputs/results/xgboost_feature_importance.csv')
         return predictions, segment_analysis, feature_importance
     except FileNotFoundError as e:
         st.error(f"Data files not found: {e}")
         st.info("Make sure CSV files are in 'outputs/results/' directory")
         return None, None, None
-
+        
 predictions, segment_analysis, feature_importance = load_data()
 
 if predictions is None:
@@ -45,10 +45,10 @@ if predictions is None:
 # HEADER
 # ============================================================================
 
-st.title("Credit Risk Default Prediction Dashboard")
+st.title("Credit Risk Default Prediction Dashboard")  
 st.markdown("XGBoost Model · ROC-AUC: **0.753** · 307,511 Applications")
 st.markdown("---")
-
+ 
 # ============================================================================
 # KPI ROW
 # ============================================================================
@@ -56,11 +56,11 @@ st.markdown("---")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric("Total Applications", f"{len(predictions):,}")
+    st.metric("Total Applications", f"{len(predictions):,}") 
 
 with col2:
-    default_rate = predictions['actual_default'].mean()
-    st.metric("Default Rate", f"{default_rate:.2%}")
+    default_rate = predictions['actual_default'].mean() 
+    st.metric("Default Rate", f"{default_rate:.2%}") 
 
 with col3:
     st.metric("Model ROC-AUC", "0.753")
@@ -72,7 +72,7 @@ with col4:
     else:
         st.metric("Flagged as Risky", "N/A")
 
-st.markdown("---")
+st.markdown("---") 
 
 # ============================================================================
 # TWO COLUMN LAYOUT
@@ -80,15 +80,16 @@ st.markdown("---")
 
 col_left, col_right = st.columns(2)
 
+
 # ============================================================================
 # LEFT: RISK BUCKET DISTRIBUTION
 # ============================================================================
 
 with col_left:
-    st.subheader("Risk Bucket Distribution")
+    st.subheader("Risk Bucket Distribution") 
     
-    # Create risk buckets if not already present
-    if 'risk_bucket' not in predictions.columns:
+    # Create risk buckets if not already present 
+    if 'risk_bucket' not in predictions.columns: 
         predictions['risk_bucket'] = pd.cut(
             predictions['default_probability'],
             bins=[0, 0.2, 0.4, 0.6, 0.8, 1.0],
@@ -114,6 +115,8 @@ with col_left:
     fig.update_layout(showlegend=False)
     st.plotly_chart(fig, use_container_width=True)
 
+
+
 # ============================================================================
 # RIGHT: DEFAULT RATE BY SEGMENT
 # ============================================================================
@@ -137,11 +140,13 @@ with col_right:
 
 st.markdown("---")
 
+
 # ============================================================================
 # SECOND ROW: PROBABILITY DISTRIBUTION + FEATURE IMPORTANCE
 # ============================================================================
-
 col_left2, col_right2 = st.columns(2)
+
+
 
 # ============================================================================
 # LEFT: PROBABILITY DISTRIBUTION
@@ -161,6 +166,7 @@ with col_left2:
     fig_hist.add_vline(x=0.4, line_dash="dash", line_color="red", 
                        annotation_text="Risk Threshold (80% Recall)")
     st.plotly_chart(fig_hist, use_container_width=True)
+
 
 # ============================================================================
 # RIGHT: FEATURE IMPORTANCE
@@ -189,6 +195,8 @@ with col_right2:
 
 st.markdown("---")
 
+
+
 # ============================================================================
 # THIRD ROW: SEGMENT DETAILS TABLE
 # ============================================================================
@@ -209,6 +217,9 @@ if segment_analysis is not None:
     )
 else:
     st.info("Segment analysis data not available")
+
+
+
 
 # ============================================================================
 # FOOTER

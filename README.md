@@ -23,7 +23,7 @@ This project builds a full credit risk analytics pipeline on the [Home Credit De
 
 **Final model:** XGBoost classifier · ROC-AUC: **0.753** · Precision@80%Recall: **13.6%**
 
-> 📊 [View the interactive Power BI dashboard](https://gaudihan-credit-risk-default-prediction.streamlit.app/) ← coming soon
+> 📊 [View Live dashboard](https://gaudihan-credit-risk-default-prediction.streamlit.app/)
 
 ---
 
@@ -258,7 +258,7 @@ jupyter==1.0.0
 
 ## Skills Demonstrated
 
-`Python` `Pandas` `XGBoost` `Scikit-learn` `SHAP` `Feature Engineering` `Power BI` `Imbalanced Classification` `Business Communication`
+`Python` `Pandas` `XGBoost` `Scikit-learn` `SHAP` `Feature Engineering` `Streamlit` `Imbalanced Classification` `Business Communication`
 
 ---
 
