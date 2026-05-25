@@ -45,7 +45,7 @@ if predictions is None:
 # HEADER
 # ============================================================================
 
-st.title("📊 Credit Risk Default Prediction Dashboard")
+st.title("Credit Risk Default Prediction Dashboard")
 st.markdown("XGBoost Model · ROC-AUC: **0.753** · 307,511 Applications")
 st.markdown("---")
 
@@ -85,7 +85,7 @@ col_left, col_right = st.columns(2)
 # ============================================================================
 
 with col_left:
-    st.subheader("🎯 Risk Bucket Distribution")
+    st.subheader("Risk Bucket Distribution")
     
     # Create risk buckets if not already present
     if 'risk_bucket' not in predictions.columns:
@@ -119,7 +119,7 @@ with col_left:
 # ============================================================================
 
 with col_right:
-    st.subheader("📈 Default Rate by Segment")
+    st.subheader("Default Rate by Segment")
     
     if segment_analysis is not None:
         segment_fig = px.bar(
@@ -148,7 +148,7 @@ col_left2, col_right2 = st.columns(2)
 # ============================================================================
 
 with col_left2:
-    st.subheader("📊 Default Probability Distribution")
+    st.subheader("Default Probability Distribution")
     
     fig_hist = px.histogram(
         predictions,
@@ -167,7 +167,7 @@ with col_left2:
 # ============================================================================
 
 with col_right2:
-    st.subheader("🔍 Top Predictors of Default")
+    st.subheader("Top Predictors of Default")
     
     if feature_importance is not None and len(feature_importance) > 0:
         top_features = feature_importance.head(10).copy()
@@ -193,7 +193,7 @@ st.markdown("---")
 # THIRD ROW: SEGMENT DETAILS TABLE
 # ============================================================================
 
-st.subheader("📋 Risk Segment Details")
+st.subheader("Risk Segment Details")
 
 if segment_analysis is not None:
     display_df = segment_analysis.copy()
