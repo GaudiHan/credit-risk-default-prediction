@@ -23,7 +23,7 @@ This project builds a full credit risk analytics pipeline on the [Home Credit De
 
 **Final model:** XGBoost classifier · ROC-AUC: **0.753** · Precision@80%Recall: **13.6%**
 
-> 📊 [View the interactive Power BI dashboard](#) ← coming soon
+> 📊 [View the interactive Power BI dashboard](https://gaudihan-credit-risk-default-prediction.streamlit.app/) ← coming soon
 
 ---
 
@@ -43,28 +43,25 @@ credit-risk-default/
 ├── data/                               # Raw data (not committed, exceed file limit, see the following Data section)
 │   ├── application_train.csv
 │   ├── application_test.csv
-│   └── bureau.csv
+│   └── bureau.csv 
 │   
 ├── notebooks/
 │   ├── 01_eda.ipynb                    # Exploratory data analysis & visualisation
-│   ├── 02_feature_engineering.ipynb    # Feature creation & preprocessing
+│   ├── 02_feature_engineering.ipynb    # Feature creation & preprocessing 
 │   ├── 03_modelling.ipynb              # RandomForest Model training and evaluation
-│   ├── 04_xgboost_modelling.ipynb      # XGBoost Model training, evaluation & SHAP analysis
-│   └── 05_lightgbm_modelling.ipynb     # LightGBM Model training, evaluation & SHAP analysis
+│   ├── 04_xgboost_modelling.ipynb      # XGBoost Model training, evaluation & SHAP analysis 
+│   └── 05_lightgbm_modelling.ipynb     # LightGBM Model training, evaluation & SHAP analysis 
 │ 
 ├── outputs/
 │   ├── data/                           # Saved training data
-│   ├── figures/                        # All saved charts
+│   ├── figures/                        # All saved charts 
 │   ├── models/                         # Saved models (.pkl)
-│   └── results/                        # Various process results
-│
-├── dashboard/                          # CSVs and Power BI file for dashboard
-│  
-│
+│   └── results/                        # Various process results 
+│   
+├── app.py                              # Streamlit app 
 ├── consulting_summary.html             # Consulting summary
 ├── consulting_summary.pdf              # Consulting summary, but pdf
-├── .gitattributes
-├── .gitignore
+├── requirements.txt
 └── README.md
 ```
  
@@ -72,7 +69,7 @@ credit-risk-default/
 
 ## Data
 
-**Source:** [Kaggle — Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/data)  
+**Source:** [Kaggle - Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk/data)  
 
 **Tables used:**
 
@@ -82,7 +79,7 @@ credit-risk-default/
 | `application_test.csv` | 48,744 | Holdout set for final predictions |
 | `bureau.csv` | 1,716,428 | Prior credit bureau records per applicant | 
 
-**Target variable:** `TARGET` — 1 = payment difficulties (default), 0 = repaid on time   
+**Target variable:** `TARGET`: 1 = payment difficulties (default), 0 = repaid on time   
 
 **Class imbalance:** ~8% positive class. Handled via `scale_pos_weight` in XGBoost.
 
@@ -97,10 +94,10 @@ unzip home-credit-default-risk.zip -d data/
 
 ## Methodology
 
-### 1. Exploratory Data Analysis
-- Profiled 122 features across 307K applicants 
+### 1. Exploratory Data Analysis 
+- Profiled 122 features across 307K applicants  
 - Identified class imbalance (8% default rate) and missing value patterns 
-- Key finding: `EXT_SOURCE_1/2/3` (external credit scores) are the strongest predictors 
+- Key finding: `EXT_SOURCE_1/2/3` (external credit scores) are the strongest predictors  
 
 ### 2. Feature Engineering
 Created domain-driven features grounded in credit analysis logic: 
@@ -123,26 +120,26 @@ Created domain-driven features grounded in credit analysis logic:
 | **Best Model** | **XGBoost 0.753** | Selected for final deployment |
 
 ### 4. Explainability (SHAP)
-Used SHAP TreeExplainer to surface the top drivers of default probability — making the model interpretable for non-technical credit officers.
+SHAP TreeExplainer was used to show the top drivers of default probability, so that the model can be interpreted for non-technical credit officers.
 
 **Top predictors of default:**
-1. `EXT_SOURCE_2` — external credit score (lower = higher risk)
-2. `EXT_SOURCE_3` — secondary credit score
-3. `AMT_GOODS_PRICE` — loan purpose and size matter
-4. `EXT_SOURCE_1` — tertiary credit score
-5. `AMT_CREDIT` — total credit amount
+1. `EXT_SOURCE_2`, external credit score (lower = higher risk)
+2. `EXT_SOURCE_3`, secondary credit score
+3. `AMT_GOODS_PRICE`, loan purpose and size matter
+4. `EXT_SOURCE_1`, tertiary credit score
+5. `AMT_CREDIT`, total credit amount
 
 ---
 
 ## Model Performance
 
-| Model | ROC-AUC | Improvement | Notes |
+| Model | ROC-AUC | Improvement | Notes | 
 |-------|---------|-------------|-------|
-| Random Forest (baseline) | 0.701 | — | Simple, no tuning |
-| Random Forest (optimized) | 0.737 | +3.6% | `class_weight='balanced'` |
-| XGBoost (tuned) | **0.753** | **+5.2%** | RandomizedSearchCV, SHAP |
+| Random Forest (baseline) | 0.701 | - | Simple, no tuning |
+| Random Forest (optimized) | 0.737 | +3.6% | `class_weight='balanced'` |  
+| XGBoost (tuned) | **0.753** | **+5.2%** | RandomizedSearchCV, SHAP | 
 | LightGBM (tuned) | 0.752 | +5.1% | Slightly faster training |
-| **Best Model** | **XGBoost 0.753** | — | Selected for final deployment |
+| **Best Model** | **XGBoost 0.753** | - | Selected for final deployment |
 
 ---
 
@@ -151,11 +148,11 @@ Used SHAP TreeExplainer to surface the top drivers of default probability — ma
 ### 1. External Credit Scores Dominate Prediction 
 
 SHAP analysis confirms `EXT_SOURCE_2`, `EXT_SOURCE_3`, and `EXT_SOURCE_1` are the top three predictors of default.
-
-| Credit Score Range | Default Rate | Risk vs. High Score |
+ 
+| Credit Score Range | Default Rate | Risk vs. High Score | 
 |-------------------|--------------|---------------------|
-| `EXT_SOURCE_2` < 0.3 (Low) | **15.88%** | **3.5x higher** |
-| `EXT_SOURCE_2` > 0.6 (High) | 4.56% | Baseline |
+| `EXT_SOURCE_2` < 0.3 (Low) | **15.88%** | **3.5x higher** | 
+| `EXT_SOURCE_2` > 0.6 (High) | 4.56% | Baseline | 
 
 **Business implication:** Applicants with scores below 0.3 should trigger enhanced review. This single flag identifies a segment with nearly 4x the risk of high-score applicants.
 
@@ -163,36 +160,36 @@ SHAP analysis confirms `EXT_SOURCE_2`, `EXT_SOURCE_3`, and `EXT_SOURCE_1` are th
 
 Unlike the common assumption that "higher debt = higher risk," our analysis reveals a peak in the middle:
 
-| Debt-to-Income Band | Default Rate | Insight |
-|--------------------|--------------|---------|
+| Debt-to-Income Band | Default Rate | Insight |  
+|--------------------|--------------|---------| 
 | Low (≤2x) | 7.43% | Safest group |
 | **Medium (2x-3.5x)** | **8.81%** | **Peak risk** |
 | High (>3.5x) | 7.95% | Slightly lower |
 
-**Why this happens:** Applicants with very high debt burdens may be higher income or have compensating factors (good credit scores). The medium band contains more marginal borrowers.
-
-**Business implication:** Use multi-band thresholds, not a single cap.
+**Why this happens:** Applicants with very high debt burdens may be higher income or have compensating factors (good credit scores). The medium band contains more marginal borrowers. 
+ 
+**Business implication:** Use multi-band thresholds, not a single cap. 
 
 ### 3. Employment Tenure is a Material Risk Factor
 
 | Employment Length | Default Rate | Risk Multiplier |
 |------------------|--------------|-----------------|
 | < 1 year | **10.98%** | **1.7x** |
-| > 5 years | 6.41% | Baseline |
+| > 5 years | 6.41% | Baseline | 
 
 **Business implication:** Short-tenure employees, particularly young professionals, represent a distinct risk segment. Consider alternative verification (e.g., employment contract, industry stability) for this group.
 
-### 4. Thin-File Applicants (no bureau history)
+### 4. Thin-File Applicants (no bureau history) 
 
 Only 0.1% of applicants in this dataset lack bureau history, and they show no elevated risk (8.14% vs 8.07%). This finding is dataset-specific; in Hong Kong's context with high young professional immigration, thin-file risk may be more significant and warrants separate analysis.
  
 ### 5. SHAP Feature Importance
 
-The SHAP summary plot below shows which features push default probability up (red/high values) vs down (blue/low values):
+The SHAP summary plot below shows which features push default probability up (red/high values) vs down (blue/low values): 
 
-![SHAP Summary Plot](outputs/figures/shap_summary_plot.png) 
+![SHAP Summary Plot](outputs/figures/shap_summary_plot.png)  
 
-*Interpretation: Low values of EXT_SOURCE_2/3 (blue) push risk higher; high values (red) reduce risk.*
+*Interpretation: Low values of EXT_SOURCE_2/3 (blue) push risk higher; high values (red) reduce risk.* 
 
 ![SHAP Bar Plot](outputs/figures/shap_bar_plot.png)
 
@@ -200,19 +197,32 @@ The SHAP summary plot below shows which features push default probability up (re
 
 ---
 
-**Key takeaway for credit officers:** Focus on external credit scores first — they are your strongest signal. Use DTI as a secondary flag, but be aware that the 2x-3.5x band contains hidden risk. Short employment tenure is a material risk factor worth investigating further.
+**Key takeaway for credit officers:** Focus on external credit scores first as it is the strongest signal. Use DTI as a secondary flag, though keep in mind that the 2x-3.5x band contains hidden risk. Short employment tenure is a material risk factor worth investigating further.
 
 ---
 
 ## Dashboard
 
-Built in Power BI with three views:
+Streamlit dashboard is deployed for real-time credit risk exploration:
 
-1. **Portfolio Overview** — default rate by loan type, income bracket, and family status
-2. **Risk Segmentation** — borrower risk score distribution across key variables
-3. **Model Insights** — SHAP feature importance with business interpretation
+> 📊 [View Live Dashboard](https://gaudihan-credit-risk-default-prediction.streamlit.app/)
 
-> 📊 [View on Tableau Public / Power BI Web](#) ← coming soon
+### Dashboard Features 
+
+| Feature | Description |
+|------------------|--------------| 
+| KPI Card | Total applications (307K), default rate (8.07%), model ROC-AUC (0.753), and flagged rate at 80% recall |
+| Risk Bucket Distribution | Bar chart showing applications segmented by predicted risk (Very Low → Very High) |
+| Default Rate by Segment | Historical default rates across borrower segments (credit score, employment tenure, DTI bands) | 
+| Default Probability Distribution | Histogram of model predictions with 0.4 risk threshold line (captures 80% of defaults) |  
+| Top Predictors | XGBoost feature importance chart; `EXT_SOURCE_2/3/1` dominate |
+| Risk Segment Details | Sortable table with default rates and sample sizes for all segments | 
+
+### Key Dashboard Insights
+
+1. **Short-term employees (<1 year)** show the highest default rate at 10.98% (1.7× risk multiplier)
+2. **Low credit score applicants (<0.3)** default at 15.88% (3.5× higher than high-score group)
+3. The model flags **13.6% of applicants** to capture **80% of actual defaults**
 
 ---
 
